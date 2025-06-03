@@ -60,13 +60,6 @@
     // close any open file operations
 	[self CloseZipFile2];
     [self UnzipCloseFile];
-    
-    // release retained/copied properties.
-    [_password release];
-    [_delegate release];
-    [_unzippedFiles release];
-    
-	[super dealloc];
 }
 
 /**
@@ -159,7 +152,6 @@
     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     NSDateComponents* components = [gregorianCalendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay |
                                     NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:fileDate];
-    [gregorianCalendar release];
     
     zipInfo.tmz_date.tm_sec = (uInt)components.second;
     zipInfo.tmz_date.tm_min = (uInt)components.minute;
@@ -242,7 +234,6 @@
 -(BOOL) UnzipOpenFile:(NSString*) zipFile
 {
     // create an array to receive the list of unzipped files.
-    if (_unzippedFiles) [_unzippedFiles release];
     _unzippedFiles = [[NSMutableArray alloc] initWithCapacity:1];
     
 	_unzFile = unzOpen( (const char*)[zipFile UTF8String] );
@@ -396,9 +387,7 @@
                     components.year = fileInfo.tmu_date.tm_year;
                     
                     NSCalendar *gregorianCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-                    NSDate* orgDate = [[gregorianCalendar dateFromComponents:components] retain];
-                    [components release];
-                    [gregorianCalendar release];
+                    NSDate* orgDate = [gregorianCalendar dateFromComponents:components];
                     
                     NSDictionary* attr = [NSDictionary dictionaryWithObject:orgDate forKey:NSFileModificationDate]; //[_fileManager fileAttributesAtPath:fullPath traverseLink:YES];
                     if( attr )
@@ -411,7 +400,6 @@
                         }
                         
                     }
-                    [orgDate release];
                     orgDate = nil;
                 }
                 
@@ -667,9 +655,6 @@
 	NSCalendar *gregorian = [[NSCalendar alloc]
 							 initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 	NSDate *date = [gregorian dateFromComponents:comps];
-	
-	[comps release];
-	[gregorian release];
 	return date;
 }
 

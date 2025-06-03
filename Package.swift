@@ -19,7 +19,7 @@ let package = Package(name: "ZipArchive",
                               publicHeadersPath: ".",
                               cSettings: [
                                   .define("unix"),
-                                  .unsafeFlags(["-fno-objc-arc", "-w"])
+                                  .unsafeFlags(["-w"])
                               ],
                               linkerSettings: [
                                   .linkedLibrary("z"),

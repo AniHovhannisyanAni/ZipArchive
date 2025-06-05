@@ -13,7 +13,22 @@ let package = Package(name: "ZipArchive",
                           )
                       ],
                       targets: [
-                          .target(
-                              name: "ZipArchive"
-                          )
-                      ])
+                        .target(
+                            name: "ZipArchive",
+                            path: "Sources/ZipArchive",
+                            sources: [
+                                "ZipArchive.m",
+                                "minizip/ioapi.c",
+                                "minizip/mztools.c",
+                                "minizip/unzip.c",
+                                "minizip/zip.c"
+                            ],
+                            publicHeadersPath: ".",
+                            cSettings: [
+                                .define("unix"),
+                            ],
+                            linkerSettings: [
+                                .linkedLibrary("z"),
+                            ]
+                        )
+                    ])
